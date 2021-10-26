@@ -1,6 +1,6 @@
 import { IsDefined } from 'class-validator';
 
-export class Info {
+export default class Info {
   @IsDefined()
   country: string;
 

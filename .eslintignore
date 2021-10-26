@@ -1,4 +1,9 @@
 *.js
+
+/ .eslintignore
+build/*
+public/*
+
 node_modules
 dist
 coverage

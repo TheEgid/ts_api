@@ -19,9 +19,7 @@
     "/users/{id}": {
       "get": {
         "summary": "returns simple answer from get",
-        "tags": [
-          "API functions"
-        ],
+        "tags": ["API functions"],
         "parameters": [
           {
             "name": "id",
@@ -51,9 +49,7 @@
       },
       "post": {
         "summary": "returns simple answer from post",
-        "tags": [
-          "API functions"
-        ],
+        "tags": ["API functions"],
         "requestBody": {
           "required": true,
           "content": {

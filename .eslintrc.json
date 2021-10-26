@@ -4,19 +4,31 @@
         "es2021": true,
         "jest": true
     },
-
     "extends": [
-        "standard"
+        "standard",
+        "airbnb-typescript",
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:@typescript-eslint/recommended-requiring-type-checking"
     ],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
         "ecmaVersion": 2020,
-        "sourceType": "module"
+        "sourceType": "module",
+        "project": "./tsconfig.json"
     },
     "plugins": [
-        "@typescript-eslint"
+        "@typescript-eslint" , "prettier"
     ],
     "rules": {
-        "semi": ["error", "always"]
+        "prettier/prettier": "error",
+        "semi": ["error", "always"],
+        "comma-dangle": [2, "always-multiline"],
+        "space-before-function-paren": [0, "never"],
+        "arrow-parens": 0, // Несовместимо с prettier
+        "linebreak-style": 0,
+        "no-nested-ternary": "error",
+        "no-console": [0, "never"],
+        "class-methods-use-this": [0, "never"]
     }
 }
