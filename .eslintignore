@@ -1,4 +1,4 @@
-build/*
-public/*
-/node_modules
-/.eslintrc
+*.js
+node_modules
+dist
+coverage
