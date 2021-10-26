@@ -21,14 +21,14 @@
         "@typescript-eslint" , "prettier"
     ],
     "rules": {
-        "prettier/prettier": "error",
-        "semi": ["error", "always"],
-        "comma-dangle": [2, "always-multiline"],
-        "space-before-function-paren": [0, "never"],
+        "semi": 2,
+        "comma-dangle": 2,
+        "space-before-function-paren": 0,
         "arrow-parens": 0, // Несовместимо с prettier
         "linebreak-style": 0,
-        "no-nested-ternary": "error",
-        "no-console": [0, "never"],
-        "class-methods-use-this": [0, "never"]
+        "no-nested-ternary": 2,
+        "no-console": 0,
+        "class-methods-use-this": 0,
+        "@typescript-eslint/no-explicit-any": 2
     }
 }
