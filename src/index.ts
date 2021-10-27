@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
-import log4js from 'log4js';
 import express, { Express, RequestHandler } from 'express';
 import bodyParser from 'body-parser';
+import morgan from 'morgan';
 import httpContext from 'express-http-context';
 import { useExpressServer } from 'routing-controllers';
 import swaggerUi from 'swagger-ui-express';
@@ -13,13 +13,15 @@ import UserController from './controller/user-controller';
 import SimpleController from './controller/simple-controller';
 
 dotenv.config();
-const logger = log4js.getLogger();
-logger.level = process.env.LOG_LEVEL;
+
+const app: Express = express();
+
+// setup the logger
+app.use(morgan('dev'));
 
 // const port = process.env.PORT;
 const port: number = config.get('PORT');
 
-const app: Express = express();
 app.use(cors() as RequestHandler);
 app.use(bodyParser.json());
 app.use(httpContext.middleware);
