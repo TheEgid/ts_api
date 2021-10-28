@@ -6,10 +6,9 @@
     },
     "extends": [
         "standard",
-        "airbnb-typescript",
-        "eslint:recommended",
+        "plugin:@typescript-eslint/eslint-recommended",
         "plugin:@typescript-eslint/recommended",
-        "plugin:@typescript-eslint/recommended-requiring-type-checking"
+        "prettier"
     ],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
@@ -17,9 +16,7 @@
         "sourceType": "module",
         "project": "./tsconfig.json"
     },
-    "plugins": [
-        "@typescript-eslint" , "prettier"
-    ],
+    "plugins": ["@typescript-eslint", "import", "prettier"],
     "rules": {
         "semi": 2,
         "comma-dangle": 2,
@@ -29,6 +26,7 @@
         "no-nested-ternary": 2,
         "no-console": 0,
         "class-methods-use-this": 0,
-        "@typescript-eslint/no-explicit-any": 2
+        "@typescript-eslint/no-explicit-any": 2,
+        "object-curly-newline": 0
     }
 }

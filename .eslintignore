@@ -3,6 +3,7 @@
 / .eslintignore
 build/*
 public/*
+src/swagger/*
 
 node_modules
 dist

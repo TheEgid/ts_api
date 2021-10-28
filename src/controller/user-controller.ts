@@ -7,13 +7,13 @@ import {
   Param,
   Post,
   UseAfter,
-  UseBefore,
+  UseBefore
   // UseInterceptor
-} from 'routing-controllers';
-import 'reflect-metadata';
-import httpContext from 'express-http-context';
-import { loggingAfter, loggingBefore } from '../middleware/middleware';
-import Info from '../model/info';
+} from 'routing-controllers'
+import 'reflect-metadata'
+import httpContext from 'express-http-context'
+import { loggingAfter, loggingBefore } from '../middleware/middleware'
+import Info from '../models/info'
 
 @Controller()
 export default class UserController {
@@ -26,14 +26,14 @@ export default class UserController {
   //   return content;
   // })
   getOne(@Param('id') id: number): string {
-    console.log('do something in GET function...');
-    return `This action returns user #${id}`;
+    console.log('do something in GET function...')
+    return `This action returns user #${id}`
   }
 
   @Post('/users/:id')
   @OnUndefined(204)
   postOne(@Param('id') id: number, @Body() info: Info) {
-    console.log(JSON.stringify(info));
-    console.log(`tracedId = ${httpContext.get('traceId') as string}`);
+    console.log(JSON.stringify(info))
+    console.log(`tracedId = ${httpContext.get('traceId') as string}`)
   }
 }
