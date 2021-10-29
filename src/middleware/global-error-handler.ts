@@ -5,9 +5,9 @@ import { HttpError } from "http-errors";
 @Middleware({ type: "after" })
 export default class GlobalErrorHandler implements ExpressErrorMiddlewareInterface {
   error(error: HttpError, request: Request, response: Response, next: () => NextFunction): void {
-    // response.send({ error: Error });
-    // next();
-    response.status(error.status).json(error);
+    if (error) {
+      response.send({ error: error.stack });
+    }
     next();
   }
 }

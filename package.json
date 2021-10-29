@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",
+  "nodemonConfig": {
+    "ignore": ["test/*", "src/swagger/*"]
+  },
   "scripts": {
     "build": "tsc",
     "prestart": "yarn run build",
@@ -10,7 +13,7 @@
     "server:watch": "ts-node-dev --respawn --transpile-only src/index.ts",
     "prebuild": "yarn run fmt",
     "lint": "eslint **/*.ts --color",
-    "fmt": "yarn run lint:fix && yarn run lint",
+    "fmt": "yarn run lint:fix",
     "lint:fix": "eslint **/*.ts --fix",
     "test:unit": "jest --config=jest.unit.config.js"
   },

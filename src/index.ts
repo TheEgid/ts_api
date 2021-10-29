@@ -6,11 +6,13 @@ import httpContext from "express-http-context";
 import { useExpressServer } from "routing-controllers";
 import cors from "cors";
 import config from "config";
-import expressOasGenerator from "express-oas-generator";
+import { OpenAPIV2 } from "openapi-types";
+import expressOasGenerator, { SPEC_OUTPUT_FILE_BEHAVIOR } from "express-oas-generator";
 import * as fs from "fs";
-import GlobalErrorHandler from "./middleware/global-error-handler";
+// import GlobalErrorHandler from "./middleware/global-error-handler";
 import UserController from "./controller/user-controller";
 import SimpleController from "./controller/simple-controller";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import DatabaseConnectionFacade from "./database/database-connection";
 
 dotenv.config();
@@ -19,15 +21,17 @@ const app: Express = express();
 
 const openAPIFilePath = "src/swagger/swagger.json";
 
-const redefinedSpec: JSON = JSON.parse(fs.readFileSync(openAPIFilePath, { encoding: "utf-8" }));
+const redefinedSpec = JSON.parse(
+  fs.readFileSync(openAPIFilePath, { encoding: "utf-8" })
+) as OpenAPIV2.Document;
 
 expressOasGenerator.handleResponses(app, {
-  specOutputFileBehavior: undefined,
-  swaggerDocumentOptions: undefined,
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   predefinedSpec: redefinedSpec,
   specOutputPath: openAPIFilePath,
   writeIntervalMs: 100,
+  specOutputFileBehavior: SPEC_OUTPUT_FILE_BEHAVIOR.RECREATE,
+  alwaysServeDocs: false,
+  swaggerDocumentOptions: { customCss: ".swagger-ui .info .title { color: #89bf04 }" },
 });
 
 // setup the logger
@@ -36,22 +40,14 @@ app.use(morgan("dev"));
 // const port = process.env.PORT;
 const port: number = config.get("PORT");
 
-app.get("/data", (req, res) => {
-  const data = {
-    id: 1,
-    name: "unknown",
-    activated: true,
-  };
-  return res.status(200).send(data);
-});
-
 app.use(cors() as RequestHandler);
 app.use(bodyParser.json());
 app.use(httpContext.middleware);
+
 useExpressServer(app, {
   controllers: [UserController, SimpleController], // we specify controllers we want to use
-  middlewares: [GlobalErrorHandler],
-  defaultErrorHandler: false,
+  // middlewares: [GlobalErrorHandler],
+  // defaultErrorHandler: false,
 });
 
 expressOasGenerator.handleRequests();

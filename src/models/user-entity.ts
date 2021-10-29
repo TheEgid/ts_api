@@ -1,27 +1,26 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn } from "typeorm";
 
 @Entity()
-export default class Photo {
+export default class User {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({
-    length: 100,
+    length: 40,
+  })
+  email: string;
+
+  @Column({
+    length: 40,
   })
   name: string;
 
   @Column("text")
-  description: string;
-
-  @Column()
-  filename: string;
-
-  @Column("double precision")
-  views: number;
-
-  @Column()
-  isPublished: boolean;
+  hashedPassword: string;
 
   @CreateDateColumn()
   createdAt: Date;
+
+  @Column()
+  isActive: boolean;
 }

@@ -2,24 +2,11 @@
   "definitions": {},
   "host": "localhost:3000",
   "info": {
-    "title": "test-app",
+    "title": "ts-app",
     "version": "1.0.0",
     "description": "Specification JSONs: [v2](/api-spec/v2), [v3](/api-spec/v3)."
   },
   "paths": {
-    "/data": {
-      "get": {
-        "summary": "/data",
-        "consumes": [
-          "application/json"
-        ],
-        "parameters": [],
-        "responses": {
-          "304": {}
-        },
-        "tags": []
-      }
-    },
     "/users/{id}": {
       "get": {
         "summary": "/users/{id}",
@@ -30,11 +17,46 @@
           {
             "name": "id",
             "in": "path",
-            "required": true
+            "required": true,
+            "type": "integer",
+            "example": 1
           }
         ],
-        "responses": {},
-        "tags": []
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "string",
+              "example": "This action returns user #1"
+            }
+          },
+          "304": {},
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "type": "string",
+              "example": "Error: \n    at new HttpError (D:\\ts_api\\node_modules\\src\\http-error\\HttpError.ts:16:18)\n    at new NotFoundError (D:\\ts_api\\node_modules\\src\\http-error\\NotFoundError.ts:10:5)\n    at ExpressDriver.handleSuccess (D:\\ts_api\\node_modules\\src\\driver\\express\\ExpressDriver.ts:324:15)\n    at D:\\ts_api\\node_modules\\src\\RoutingControllers.ts:164:35\n    at processTicksAndRejections (internal/process/task_queues.js:95:5)"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "type": "string",
+              "example": "{}<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>RangeError [ERR_HTTP_INVALID_STATUS_CODE]: Invalid status code: undefined<br> &nbsp; &nbsp;at new NodeError (internal/errors.js:322:7)<br> &nbsp; &nbsp;at ServerResponse.writeHead (_http_server.js:259:11)<br> &nbsp; &nbsp;at ServerResponse.writeHead (D:\\ts_api\\node_modules\\on-headers\\index.js:44:26)<br> &nbsp; &nbsp;at ServerResponse._implicitHeader (_http_server.js:250:8)<br> &nbsp; &nbsp;at write_ (_http_outgoing.js:711:9)<br> &nbsp; &nbsp;at ServerResponse.end (_http_outgoing.js:825:5)<br> &nbsp; &nbsp;at ServerResponse.res.end (D:\\ts_api\\node_modules\\express-oas-generator\\lib\\processors.js:247:14)<br> &nbsp; &nbsp;at ServerResponse.send (D:\\ts_api\\node_modules\\express\\lib\\response.js:221:10)<br> &nbsp; &nbsp;at ServerResponse.json (D:\\ts_api\\node_modules\\express\\lib\\response.js:267:15)<br> &nbsp; &nbsp;at GlobalErrorHandler.error (D:\\ts_api\\src\\middleware\\global-error-handler.ts:10:35)</pre>\n</body>\n</html>\n"
+            }
+          },
+          "undefined": {
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          }
+        },
+        "tags": [],
+        "produces": [
+          "application/json",
+          "text/html"
+        ]
       },
       "post": {
         "summary": "/users/{id}",
@@ -160,6 +182,19 @@
           "application/json",
           "text/html"
         ]
+      }
+    },
+    "/data": {
+      "get": {
+        "summary": "/data",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "304": {}
+        },
+        "tags": []
       }
     }
   },

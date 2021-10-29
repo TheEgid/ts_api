@@ -1,6 +1,8 @@
 import Photo from "../models/photo-entity";
+import User from "../models/user-entity";
+import { Connection } from "typeorm";
 
-export default class Postgres {
+export default class Postgres extends Connection {
   static getConnection(): {
     name: string;
     type: string;
@@ -10,11 +12,11 @@ export default class Postgres {
     entities: Array<unknown>;
   } {
     return {
-      entities: [Photo],
+      entities: [Photo, User],
       synchronize: true,
       name: process.env.DB_NAME,
       type: "postgres",
-      logging: false,
+      logging: true,
       url: process.env.DEV_DATABASE_URL,
     };
   }
