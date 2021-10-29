@@ -7,17 +7,17 @@ import {
   Param,
   Post,
   UseAfter,
-  UseBefore
+  UseBefore,
   // UseInterceptor
-} from 'routing-controllers'
-import 'reflect-metadata'
-import httpContext from 'express-http-context'
-import { loggingAfter, loggingBefore } from '../middleware/middleware'
-import Info from '../models/info'
+} from "routing-controllers";
+import "reflect-metadata";
+import httpContext from "express-http-context";
+import { loggingAfter, loggingBefore } from "../middleware/middleware";
+import Info from "../models/info";
 
 @Controller()
 export default class UserController {
-  @Get('/users/:id')
+  @Get("/users/:id")
   @UseBefore(loggingBefore)
   @UseAfter(loggingAfter)
   // @UseInterceptor(function (action: Action, content: any) {
@@ -25,15 +25,15 @@ export default class UserController {
   //   content = 'interceptor';
   //   return content;
   // })
-  getOne(@Param('id') id: number): string {
-    console.log('do something in GET function...')
-    return `This action returns user #${id}`
+  getOne(@Param("id") id: number): string {
+    console.log("do something in GET function...");
+    return `This action returns user #${id}`;
   }
 
-  @Post('/users/:id')
+  @Post("/users/:id")
   @OnUndefined(204)
-  postOne(@Param('id') id: number, @Body() info: Info) {
-    console.log(JSON.stringify(info))
-    console.log(`tracedId = ${httpContext.get('traceId') as string}`)
+  postOne(@Param("id") id: number, @Body() info: Info) {
+    console.log(JSON.stringify(info));
+    console.log(`tracedId = ${httpContext.get("traceId") as string}`);
   }
 }

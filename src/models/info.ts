@@ -1,9 +1,9 @@
-import { IsDefined } from 'class-validator'
+import { IsDefined } from "class-validator";
 
 export default class Info {
   @IsDefined()
-  country: string
+  country: string;
 
   @IsDefined()
-  city: string
+  city: string;
 }

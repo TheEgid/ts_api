@@ -1,15 +1,15 @@
 import {
   // Action,
   JsonController,
-  Get
+  Get,
   // UseInterceptor
-} from 'routing-controllers'
-import 'reflect-metadata'
+} from "routing-controllers";
+import "reflect-metadata";
 
 @JsonController()
 export default class SimpleController {
-  @Get('/')
+  @Get("/")
   get() {
-    return { message: 'Ok' }
+    return { message: "Ok" };
   }
 }
