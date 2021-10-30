@@ -6,7 +6,7 @@ import { HttpError } from "http-errors";
 export default class GlobalErrorHandler implements ExpressErrorMiddlewareInterface {
   error(error: HttpError, request: Request, response: Response, next: () => NextFunction): void {
     if (error) {
-      response.send({ error: error.stack });
+      response.send({ error: error.status });
     }
     next();
   }

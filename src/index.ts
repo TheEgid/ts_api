@@ -9,7 +9,7 @@ import config from "config";
 import { OpenAPIV2 } from "openapi-types";
 import expressOasGenerator, { SPEC_OUTPUT_FILE_BEHAVIOR } from "express-oas-generator";
 import * as fs from "fs";
-// import GlobalErrorHandler from "./middleware/global-error-handler";
+import GlobalErrorHandler from "./middleware/global-error-handler";
 import UserController from "./controller/user-controller";
 import SimpleController from "./controller/simple-controller";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -46,7 +46,7 @@ app.use(httpContext.middleware);
 
 useExpressServer(app, {
   controllers: [UserController, SimpleController], // we specify controllers we want to use
-  // middlewares: [GlobalErrorHandler],
+  middlewares: [GlobalErrorHandler],
   // defaultErrorHandler: false,
 });
 

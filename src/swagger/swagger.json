@@ -19,56 +19,38 @@
             "in": "path",
             "required": true,
             "type": "integer",
-            "example": 7
+            "example": 2
           }
         ],
         "responses": {
           "200": {
             "description": "OK",
             "schema": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "id": {
-                    "type": "number"
-                  },
-                  "email": {
-                    "type": "string"
-                  },
-                  "name": {
-                    "type": "string"
-                  },
-                  "hashedPassword": {
-                    "type": "string"
-                  },
-                  "createdAt": {
-                    "type": "string"
-                  },
-                  "isActive": {
-                    "type": "boolean"
-                  }
-                }
-              }
-            }
-          },
-          "304": {},
-          "500": {
-            "description": "Internal Server Error",
-            "schema": {
               "type": "object",
               "properties": {
+                "id": {
+                  "type": "number",
+                  "example": 2
+                },
+                "email": {
+                  "type": "string",
+                  "example": "vasya@ez.com"
+                },
                 "name": {
                   "type": "string",
-                  "example": "RepositoryNotFoundError"
+                  "example": "vasya@ez.com"
                 },
-                "message": {
+                "hashedPassword": {
                   "type": "string",
-                  "example": "No repository for \"User\" was found. Looks like this entity is not registered in current \"async-blogs\" connection?"
+                  "example": "kMErsMooELOv$2341b44374bd08b320d8ace5ad0cdd9b461551b7203bb11078cedcc602db27b9"
                 },
-                "stack": {
+                "createdAt": {
                   "type": "string",
-                  "example": "RepositoryNotFoundError: No repository for \"User\" was found. Looks like this entity is not registered in current \"async-blogs\" connection?\n    at RepositoryNotFoundError.TypeORMError [as constructor] (D:\\ts_api\\src\\error\\TypeORMError.ts:7:9)\n    at new RepositoryNotFoundError (D:\\ts_api\\src\\error\\RepositoryNotFoundError.ts:10:9)\n    at EntityManager.getRepository (D:\\ts_api\\src\\entity-manager\\EntityManager.ts:931:19)\n    at Connection.getRepository (D:\\ts_api\\src\\connection\\Connection.ts:339:29)\n    at UserController.<anonymous> (D:\\ts_api\\src\\controller\\user-controller.ts:13:8)\n    at step (D:\\ts_api\\src\\controller\\user-controller.ts:45:23)\n    at Object.next (D:\\ts_api\\src\\controller\\user-controller.ts:26:53)\n    at D:\\ts_api\\src\\controller\\user-controller.ts:20:71\n    at new Promise (<anonymous>)\n    at __awaiter (D:\\ts_api\\src\\controller\\user-controller.ts:16:12)"
+                  "example": "2021-10-29T17:12:36.081Z"
+                },
+                "isActive": {
+                  "type": "boolean",
+                  "example": true
                 }
               }
             }
@@ -87,49 +69,8 @@
           "application/json"
         ],
         "parameters": [],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "id": {
-                    "type": "number"
-                  },
-                  "email": {
-                    "type": "string"
-                  },
-                  "name": {
-                    "type": "string"
-                  },
-                  "hashedPassword": {
-                    "type": "string"
-                  },
-                  "createdAt": {
-                    "type": "string"
-                  },
-                  "isActive": {
-                    "type": "boolean"
-                  }
-                },
-                "required": [
-                  "id",
-                  "email",
-                  "name",
-                  "hashedPassword",
-                  "createdAt",
-                  "isActive"
-                ]
-              }
-            }
-          }
-        },
-        "tags": [],
-        "produces": [
-          "application/json"
-        ]
+        "responses": {},
+        "tags": []
       }
     },
     "/": {
