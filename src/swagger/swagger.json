@@ -7,6 +7,167 @@
     "description": "Specification JSONs: [v2](/api-spec/v2), [v3](/api-spec/v3)."
   },
   "paths": {
+    "/user/{id}": {
+      "get": {
+        "summary": "/user/{id}",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "example": 7
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "number"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "hashedPassword": {
+                    "type": "string"
+                  },
+                  "createdAt": {
+                    "type": "string"
+                  },
+                  "isActive": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            }
+          },
+          "304": {},
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "RepositoryNotFoundError"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "No repository for \"User\" was found. Looks like this entity is not registered in current \"async-blogs\" connection?"
+                },
+                "stack": {
+                  "type": "string",
+                  "example": "RepositoryNotFoundError: No repository for \"User\" was found. Looks like this entity is not registered in current \"async-blogs\" connection?\n    at RepositoryNotFoundError.TypeORMError [as constructor] (D:\\ts_api\\src\\error\\TypeORMError.ts:7:9)\n    at new RepositoryNotFoundError (D:\\ts_api\\src\\error\\RepositoryNotFoundError.ts:10:9)\n    at EntityManager.getRepository (D:\\ts_api\\src\\entity-manager\\EntityManager.ts:931:19)\n    at Connection.getRepository (D:\\ts_api\\src\\connection\\Connection.ts:339:29)\n    at UserController.<anonymous> (D:\\ts_api\\src\\controller\\user-controller.ts:13:8)\n    at step (D:\\ts_api\\src\\controller\\user-controller.ts:45:23)\n    at Object.next (D:\\ts_api\\src\\controller\\user-controller.ts:26:53)\n    at D:\\ts_api\\src\\controller\\user-controller.ts:20:71\n    at new Promise (<anonymous>)\n    at __awaiter (D:\\ts_api\\src\\controller\\user-controller.ts:16:12)"
+                }
+              }
+            }
+          }
+        },
+        "tags": [],
+        "produces": [
+          "application/json"
+        ]
+      }
+    },
+    "/users": {
+      "get": {
+        "summary": "/users",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "number"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "hashedPassword": {
+                    "type": "string"
+                  },
+                  "createdAt": {
+                    "type": "string"
+                  },
+                  "isActive": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "id",
+                  "email",
+                  "name",
+                  "hashedPassword",
+                  "createdAt",
+                  "isActive"
+                ]
+              }
+            }
+          }
+        },
+        "tags": [],
+        "produces": [
+          "application/json"
+        ]
+      }
+    },
+    "/": {
+      "get": {
+        "summary": "/",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Ok"
+                }
+              }
+            }
+          },
+          "304": {},
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "type": "string",
+              "example": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot GET /docs/</pre>\n</body>\n</html>\n"
+            }
+          }
+        },
+        "tags": [],
+        "produces": [
+          "application/json",
+          "text/html"
+        ]
+      }
+    },
     "/users/{id}": {
       "get": {
         "summary": "/users/{id}",
@@ -138,42 +299,6 @@
                   ]
                 }
               }
-            }
-          }
-        },
-        "tags": [],
-        "produces": [
-          "application/json",
-          "text/html"
-        ]
-      }
-    },
-    "/": {
-      "get": {
-        "summary": "/",
-        "consumes": [
-          "application/json"
-        ],
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "message": {
-                  "type": "string",
-                  "example": "Ok"
-                }
-              }
-            }
-          },
-          "304": {},
-          "404": {
-            "description": "Not Found",
-            "schema": {
-              "type": "string",
-              "example": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot GET /docs/</pre>\n</body>\n</html>\n"
             }
           }
         },
