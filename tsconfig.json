@@ -6,6 +6,9 @@
     "baseUrl": ".",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "target": "es6",
+    "module": "CommonJS",
+    "alwaysStrict": true
   }
 }

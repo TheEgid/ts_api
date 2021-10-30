@@ -3,6 +3,7 @@ import { loggingAfter, loggingBefore } from "../middleware/middleware";
 import { getConnection } from "typeorm";
 import User from "../models/user-entity";
 import { StatusCodes } from "http-status-codes";
+import UsersRepository from "../repos/users-repository";
 
 @Controller()
 export default class UserController {
@@ -12,8 +13,8 @@ export default class UserController {
   @UseAfter(loggingAfter)
   public async getUserById(@Param("id") id: number) {
     return await getConnection(process.env.DB_NAME)
-      .getRepository(User)
-      .findOne({ where: { id: id } });
+      .getCustomRepository(UsersRepository)
+      .findById(id);
   }
 
   @Get("/users")
@@ -21,8 +22,12 @@ export default class UserController {
   @UseBefore(loggingBefore)
   @UseAfter(loggingAfter)
   public async getUsers() {
-    return await getConnection(process.env.DB_NAME).getRepository(User).find();
+    return await getConnection(process.env.DB_NAME).getCustomRepository(UsersRepository).findAll();
   }
+
+  // return await getConnection(process.env.DB_NAME)
+  //   .getRepository(User)
+  //   .findOne({ where: { id: id } });
 
   // getOne(@Param("id") id: number) {
   //   console.log("do something in GET function...");
