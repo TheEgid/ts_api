@@ -14,7 +14,7 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "example": 2,
+            "example": 8,
             "schema": {
               "type": "integer"
             }
@@ -56,6 +56,9 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": ""
           }
         },
         "tags": []

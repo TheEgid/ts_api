@@ -19,7 +19,7 @@
             "in": "path",
             "required": true,
             "type": "integer",
-            "example": 2
+            "example": 8
           }
         ],
         "responses": {
@@ -54,7 +54,8 @@
                 }
               }
             }
-          }
+          },
+          "400": {}
         },
         "tags": [],
         "produces": [
