@@ -19,7 +19,7 @@
             "in": "path",
             "required": true,
             "type": "integer",
-            "example": 2
+            "example": 1
           }
         ],
         "responses": {
@@ -57,6 +57,13 @@
           },
           "304": {},
           "400": {},
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "type": "string",
+              "example": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot GET /user/1</pre>\n</body>\n</html>\n"
+            }
+          },
           "500": {
             "description": "Internal Server Error",
             "schema": {
@@ -80,9 +87,57 @@
         ],
         "parameters": [],
         "responses": {
-          "304": {}
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "number"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "hashedPassword": {
+                    "type": "string"
+                  },
+                  "createdAt": {
+                    "type": "string"
+                  },
+                  "isActive": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "id",
+                  "email",
+                  "name",
+                  "hashedPassword",
+                  "createdAt",
+                  "isActive"
+                ]
+              }
+            }
+          },
+          "304": {},
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "type": "string",
+              "example": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot GET /users</pre>\n</body>\n</html>\n"
+            }
+          }
         },
-        "tags": []
+        "tags": [],
+        "produces": [
+          "text/html",
+          "application/json"
+        ]
       }
     },
     "/": {

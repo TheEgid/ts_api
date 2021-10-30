@@ -1,5 +1,5 @@
 import { Connection } from "typeorm";
-import UserToken from "../models/user-token-entity";
+import UserToken from "../models/token-entity";
 import Photo from "../models/photo-entity";
 import User from "../models/user-entity";
 

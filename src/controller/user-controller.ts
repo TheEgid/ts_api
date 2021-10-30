@@ -1,7 +1,6 @@
-import { Controller, Get, OnUndefined, Param, UseAfter, UseBefore } from "routing-controllers";
+import { Get, Controller, OnUndefined, Param, UseAfter, UseBefore } from "routing-controllers";
 import { loggingAfter, loggingBefore } from "../middleware/middleware";
 import { getConnection } from "typeorm";
-import User from "../models/user-entity";
 import { StatusCodes } from "http-status-codes";
 import UsersRepository from "../repos/users-repository";
 

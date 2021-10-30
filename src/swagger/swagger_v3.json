@@ -14,7 +14,7 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "example": 2,
+            "example": 1,
             "schema": {
               "type": "integer"
             }
@@ -94,6 +94,23 @@
           "400": {
             "description": ""
           },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "example": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot GET /user/1</pre>\n</body>\n</html>\n"
+                }
+              },
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "example": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot GET /user/1</pre>\n</body>\n</html>\n"
+                }
+              }
+            }
+          },
           "500": {
             "description": "Internal Server Error",
             "content": {
@@ -119,8 +136,102 @@
       "get": {
         "summary": "/users",
         "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "number"
+                      },
+                      "email": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "hashedPassword": {
+                        "type": "string"
+                      },
+                      "createdAt": {
+                        "type": "string"
+                      },
+                      "isActive": {
+                        "type": "boolean"
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "email",
+                      "name",
+                      "hashedPassword",
+                      "createdAt",
+                      "isActive"
+                    ]
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "number"
+                      },
+                      "email": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "hashedPassword": {
+                        "type": "string"
+                      },
+                      "createdAt": {
+                        "type": "string"
+                      },
+                      "isActive": {
+                        "type": "boolean"
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "email",
+                      "name",
+                      "hashedPassword",
+                      "createdAt",
+                      "isActive"
+                    ]
+                  }
+                }
+              }
+            }
+          },
           "304": {
             "description": ""
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "example": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot GET /users</pre>\n</body>\n</html>\n"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "example": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot GET /users</pre>\n</body>\n</html>\n"
+                }
+              }
+            }
           }
         },
         "tags": []
