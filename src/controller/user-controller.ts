@@ -1,8 +1,9 @@
-import { Get, Controller, OnUndefined, Param, UseAfter, UseBefore } from "routing-controllers";
+import { Controller, Get, OnUndefined, Param, UseAfter, UseBefore } from "routing-controllers";
 import { loggingAfter, loggingBefore } from "../middleware/middleware";
 import { getConnection } from "typeorm";
 import { StatusCodes } from "http-status-codes";
 import UsersRepository from "../repos/users-repository";
+import ListUserService from "../services/ListUserService";
 
 @Controller()
 export default class UserController {
@@ -18,11 +19,14 @@ export default class UserController {
 
   @Get("/users")
   @OnUndefined(StatusCodes.BAD_REQUEST)
-  @UseBefore(loggingBefore)
-  @UseAfter(loggingAfter)
   public async getUsers() {
-    return await getConnection(process.env.DB_NAME).getCustomRepository(UsersRepository).findAll();
+    const lse = new ListUserService();
+    return await lse.execute();
   }
+
+  // public async getUsers() {
+  //   return await getConnection(process.env.DB_NAME).getCustomRepository(UsersRepository).findAll();
+  // }
 
   // return await getConnection(process.env.DB_NAME)
   //   .getRepository(User)
