@@ -7,6 +7,51 @@
     "description": "Specification JSONs: [v2](/api-spec/v2), [v3](/api-spec/v3)."
   },
   "paths": {
+    "/api/": {
+      "get": {
+        "summary": "/api/",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {},
+        "tags": []
+      }
+    },
+    "/api/signup": {
+      "post": {
+        "summary": "/api/signup",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Pet object that needs to be added to the store",
+            "required": false,
+            "schema": {
+              "required": [
+                "name",
+                "photoUrls"
+              ],
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "example": "vooer@test.ro"
+                },
+                "hashedPassword": {
+                  "type": "string",
+                  "example": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {},
+        "tags": []
+      }
+    },
     "/api/user/{id}": {
       "get": {
         "summary": "/api/user/{id}",
@@ -19,7 +64,7 @@
             "in": "path",
             "required": true,
             "type": "integer",
-            "example": 2
+            "example": 1
           }
         ],
         "responses": {},
@@ -29,17 +74,6 @@
     "/api/users": {
       "get": {
         "summary": "/api/users",
-        "consumes": [
-          "application/json"
-        ],
-        "parameters": [],
-        "responses": {},
-        "tags": []
-      }
-    },
-    "/api/": {
-      "get": {
-        "summary": "/api/",
         "consumes": [
           "application/json"
         ],

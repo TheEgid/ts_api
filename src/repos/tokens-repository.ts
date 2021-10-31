@@ -1,5 +1,5 @@
 import { Repository, getConnection } from "typeorm";
-
+import { v4 as uuid } from "uuid";
 import ITokenRepository from "./tokens-repository-interface";
 import Token from "../models/token-entity";
 
@@ -10,9 +10,14 @@ class TokenRepository implements ITokenRepository {
     this.ormRepository = getConnection(process.env.DB_NAME).getRepository(Token);
   }
 
-  public async generate(id: string): Promise<Token> {
+  public async generate(): Promise<Token> {
+    const timekiller = new Date(
+      Date.now() + Number(process.env.TO_SECONDS) * Number(process.env.TO_MINUTES)
+    ).toISOString();
     const Token = this.ormRepository.create({
-      id,
+      accessToken: uuid(),
+      refreshToken: uuid(),
+      timeKill: timekiller,
     });
     await this.ormRepository.save(Token);
     return Token;

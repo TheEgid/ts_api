@@ -14,6 +14,13 @@ class UsersRepository implements IUsersRepository {
     return await this.ormRepository.findOne(id);
   }
 
+  public async findByEmailHashedPassword(email: string, hashedPassword: string): Promise<User> {
+    return await this.ormRepository.findOne({
+      where: { email, hashedPassword },
+      withDeleted: false,
+    });
+  }
+
   public async findAll(): Promise<User[]> {
     return await this.ormRepository.find();
   }

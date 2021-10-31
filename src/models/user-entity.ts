@@ -15,19 +15,14 @@ const Id: string = uuid();
 
 @Entity()
 export default class User {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn("uuid")
   id: string;
 
   @IsEmail()
   @Column({
-    length: 40,
+    length: 60,
   })
   email: string;
-
-  @Column({
-    length: 40,
-  })
-  name: string;
 
   @Column("text")
   @MinLength(2)
@@ -36,8 +31,8 @@ export default class User {
   @CreateDateColumn()
   createdAt: Date;
 
-  @Column()
-  isActive: boolean;
+  @Column("boolean", { default: true })
+  isActive = true;
 
   @ManyToOne(() => Token)
   @JoinColumn()

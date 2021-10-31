@@ -14,12 +14,8 @@ export default class Token {
   @Column()
   refreshToken: string;
 
-  @Column()
-  timeKill: number;
-
-  // @ManyToOne(() => User)
-  // @JoinColumn({ name: "userId" })
-  // user: User;
+  @Column({ type: "timestamp" })
+  timeKill: string;
 
   constructor() {
     if (!this.id) {
