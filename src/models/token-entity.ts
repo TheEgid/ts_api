@@ -1,8 +1,7 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from "typeorm";
-import User from "./user-entity";
+import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
 import { v4 as uuid } from "uuid";
 
-const userRoleId: string = uuid();
+const Id: string = uuid();
 
 @Entity()
 export default class Token {
@@ -10,24 +9,24 @@ export default class Token {
   id: string;
 
   @Column()
-  token: string;
+  accessToken: string;
 
   @Column()
-  expires: Date;
+  refreshToken: string;
 
   @Column()
-  userId: string;
+  timeKill: number;
 
-  @ManyToOne(() => User)
-  @JoinColumn({ name: "userId" })
-  user: User;
+  // @ManyToOne(() => User)
+  // @JoinColumn({ name: "userId" })
+  // user: User;
 
   constructor() {
     if (!this.id) {
-      this.id = userRoleId;
+      this.id = Id;
     }
-    if (!this.token) {
-      this.token = userRoleId;
+    if (!this.accessToken) {
+      this.accessToken = Id;
     }
   }
 }

@@ -10,9 +10,9 @@ class TokenRepository implements ITokenRepository {
     this.ormRepository = getConnection(process.env.DB_NAME).getRepository(Token);
   }
 
-  public async generate(userId: string): Promise<Token> {
+  public async generate(id: string): Promise<Token> {
     const Token = this.ormRepository.create({
-      userId,
+      id,
     });
     await this.ormRepository.save(Token);
     return Token;

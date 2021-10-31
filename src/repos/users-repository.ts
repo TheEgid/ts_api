@@ -10,7 +10,7 @@ class UsersRepository implements IUsersRepository {
     this.ormRepository = getConnection(process.env.DB_NAME).getRepository(User);
   }
 
-  public async findById(id: number): Promise<User | undefined> {
+  public async findById(id: string): Promise<User | undefined> {
     return await this.ormRepository.findOne(id);
   }
 
@@ -35,7 +35,7 @@ class UsersRepository implements IUsersRepository {
     return user;
   }
 
-  public async remove(id: number): Promise<void> {
+  public async remove(id: string): Promise<void> {
     await this.ormRepository.delete(id);
   }
 }

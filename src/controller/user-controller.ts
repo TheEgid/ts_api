@@ -11,7 +11,7 @@ export default class UserController {
   @OnUndefined(StatusCodes.BAD_REQUEST)
   @UseBefore(loggingBefore)
   @UseAfter(loggingAfter)
-  public async getUserById(@Param("id") id: number) {
+  public async getUserById(@Param("id") id: string) {
     return await getConnection(process.env.DB_NAME)
       .getCustomRepository(UsersRepository)
       .findById(id);
