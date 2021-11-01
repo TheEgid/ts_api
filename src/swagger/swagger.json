@@ -89,8 +89,17 @@
           "application/json"
         ],
         "parameters": [],
-        "responses": {},
-        "tags": []
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "tags": [],
+        "security": [
+          {
+            "authorization": []
+          }
+        ]
       }
     },
     "/api/user/{id}": {
@@ -127,6 +136,13 @@
   "schemes": [
     "http"
   ],
+  "securityDefinitions": {
+    "authorization": {
+      "name": "authorization",
+      "in": "header",
+      "type": "apiKey"
+    }
+  },
   "swagger": "2.0",
   "tags": []
 }

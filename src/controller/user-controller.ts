@@ -1,17 +1,19 @@
 import {
-  Req,
-  Get,
-  Post,
+  Authorized,
   Body,
+  Get,
   Header,
   JsonController,
-  UnauthorizedError,
-  Authorized,
   NotFoundError,
+  Post,
+  Req,
+  UnauthorizedError,
+  OnUndefined,
 } from "routing-controllers";
 import UserService from "../services/user-service";
 import User from "../models/user-entity";
 import { Request } from "express";
+import { StatusCodes } from "http-status-codes";
 
 @JsonController()
 export default class UserController {
@@ -55,10 +57,10 @@ export default class UserController {
 
   // Возвращает авторизированного пользователя
   @Get("/info")
+  @OnUndefined(StatusCodes.BAD_REQUEST)
   @Authorized()
   async getId(@Req() req: Request): Promise<User> {
-    const user = await this.userService.getUserInfo(req);
-    return user || undefined;
+    return await this.userService.getUserInfo(req);
   }
 }
 

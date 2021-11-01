@@ -11,6 +11,7 @@ import UserController from "./controller/user-controller";
 import SimpleController from "./controller/simple-controller";
 import DatabaseConnectionFacade from "./database/database-connection";
 import { createExpressServer } from "routing-controllers";
+import { authorizationChecker } from "./auth/authorization-checker";
 
 dotenv.config();
 
@@ -25,6 +26,8 @@ DatabaseConnectionFacade.multipleConnections()
 // Создаем приложение Express
 const app = createExpressServer({
   // Префикс
+  authorizationChecker: authorizationChecker,
+
   routePrefix: process.env.SERVER_PREFIX,
   // Инициализируем ошибки
   defaults: {
@@ -36,7 +39,6 @@ const app = createExpressServer({
   },
 
   controllers: [UserController, SimpleController],
-  // authorizationChecker: authorizationChecker,
   cors: {
     origin: process.env.CORS_ORIGIN,
     methods: process.env.CORS_METHODS,

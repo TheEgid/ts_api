@@ -1,4 +1,4 @@
-import { Repository, getConnection } from "typeorm";
+import { Repository, getConnection, EntityRepository } from "typeorm";
 import { v4 as uuid } from "uuid";
 import ITokenRepository from "./tokens-repository-interface";
 import Token from "../models/token-entity";
@@ -9,6 +9,7 @@ import Token from "../models/token-entity";
 //   return date;
 // }
 
+@EntityRepository(Token)
 class TokenRepository implements ITokenRepository {
   private ormRepository: Repository<Token>;
 
@@ -33,6 +34,10 @@ class TokenRepository implements ITokenRepository {
     return await this.ormRepository.findOne({
       where: { token },
     });
+  }
+
+  public async findAll(): Promise<Token[]> {
+    return await this.ormRepository.find();
   }
 }
 

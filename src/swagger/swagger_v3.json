@@ -73,8 +73,17 @@
     "/api/info": {
       "get": {
         "summary": "/api/info",
-        "responses": {},
-        "tags": []
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "tags": [],
+        "security": [
+          {
+            "authorization": []
+          }
+        ]
       }
     },
     "/api/user/{id}": {
@@ -108,5 +117,14 @@
     {
       "url": "http://localhost:3000"
     }
-  ]
+  ],
+  "components": {
+    "securitySchemes": {
+      "authorization": {
+        "name": "authorization",
+        "in": "header",
+        "type": "apiKey"
+      }
+    }
+  }
 }
