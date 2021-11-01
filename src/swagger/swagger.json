@@ -52,6 +52,47 @@
         "tags": []
       }
     },
+    "/api/signin": {
+      "post": {
+        "summary": "/api/signin",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "example": "vasya2@ez.com"
+                },
+                "hashedPassword": {
+                  "type": "string",
+                  "example": "vasya2@ez.com"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {},
+        "tags": []
+      }
+    },
+    "/api/info": {
+      "get": {
+        "summary": "/api/info",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {},
+        "tags": []
+      }
+    },
     "/api/user/{id}": {
       "get": {
         "summary": "/api/user/{id}",

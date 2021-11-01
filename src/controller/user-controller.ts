@@ -1,15 +1,17 @@
 import {
+  Req,
   Get,
   Post,
   Body,
   Header,
   JsonController,
   UnauthorizedError,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  Param,
+  Authorized,
+  NotFoundError,
 } from "routing-controllers";
 import UserService from "../services/user-service";
 import User from "../models/user-entity";
+import { Request } from "express";
 
 @JsonController()
 export default class UserController {
@@ -33,15 +35,30 @@ export default class UserController {
   // Регистрация пользователя
   @Post("/signup")
   async registrateUser(@Body() user: User): Promise<string> {
-    // @Param("transactionId");
-    // console.log(transactionId);
     const responseSignup = await this.userService.userSignup(user);
     if (responseSignup !== process.env.USER_SERVICE_RESPONSE) {
       return responseSignup;
     } else {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
       throw new UnauthorizedError(process.env.POST_SIGNUP_MASSAGE);
     }
+  }
+
+  @Post("/signin")
+  async login(@Body() user: User): Promise<string> {
+    const responseSignin = await this.userService.userSignin(user);
+    if (responseSignin !== process.env.USER_SERVICE_RESPONSE) {
+      return responseSignin;
+    } else {
+      throw new NotFoundError(process.env.POST_SIGNIN_MASSAGE);
+    }
+  }
+
+  // Возвращает авторизированного пользователя
+  @Get("/info")
+  @Authorized()
+  async getId(@Req() req: Request): Promise<User> {
+    const user = await this.userService.getUserInfo(req);
+    return user || undefined;
   }
 }
 

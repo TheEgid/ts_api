@@ -3,6 +3,12 @@ import { v4 as uuid } from "uuid";
 import ITokenRepository from "./tokens-repository-interface";
 import Token from "../models/token-entity";
 
+// function addDays(days: number): Date {
+//   const date = new Date(Date.now());
+//   date.setDate(date.getDate() + days);
+//   return date;
+// }
+
 class TokenRepository implements ITokenRepository {
   private ormRepository: Repository<Token>;
 
