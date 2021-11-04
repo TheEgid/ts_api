@@ -4,8 +4,7 @@ import { Request } from "express";
 import TokenRepository from "../repos/tokens-repository";
 import UsersRepository from "../repos/users-repository";
 import TokenService from "./token-service";
-
-// import { IPingResult, ping } from "@network-utils/tcp-ping";
+import { IPingResult, ping } from "@network-utils/tcp-ping";
 
 export default class UserService {
   static async getUsers(): Promise<User[]> {
@@ -50,6 +49,24 @@ export default class UserService {
     }
   }
 
+  async getLatency(): Promise<IPingResult> {
+    function update(progress: number, total: number): void {
+      console.log(progress, "/", total);
+    }
+    return await ping(
+      {
+        address: process.env.PING_ADRESS,
+        attempts: Number(process.env.PING_ATTEMPTS),
+        port: Number(process.env.PING_PORT),
+        timeout: Number(process.env.PING_TIMEOUT),
+      },
+      update
+    ).then((result) => {
+      console.log("ping result:", result);
+      return result;
+    });
+  }
+
   private static async setToken(user: User): Promise<User> {
     const token: TokenRepository = new TokenRepository(); // CH to service
     user.token = await token.generate();
@@ -61,7 +78,7 @@ export default class UserService {
 //   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
 //   const [, token] = action.request.headers.authorization.split(" ", 2);
 //   const curUser = await TokenService.getUser(token as string);
-
+//
 // getLatency(): Promise<IPingResult> {
 //   function update(progress: number, total: number): void {
 //     console.log(progress, "/", total);

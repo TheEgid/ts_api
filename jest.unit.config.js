@@ -1,12 +1,13 @@
-process.env.NODE_ENV = 'UNITTEST';
+// process.env.NODE_ENV = 'UNITTEST';
 module.exports = {
-    clearMocks: true,
-    collectCoverage: true,
-    collectCoverageFrom: [
-        './src/**/*.ts'
-    ],
-    coverageDirectory: '<rootDir>/test/coverage',
     testEnvironment: 'node',
     testMatch: ['**/*.test.ts'],
-    preset: 'ts-jest'
+    preset: 'ts-jest',
+    testRunner : 'jest-jasmine2',
+    silent: true
 };
+
+// collectCoverage: true,
+//     collectCoverageFrom: [
+//     './src/**/*.ts'
+// ],

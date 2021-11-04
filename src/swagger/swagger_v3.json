@@ -6,13 +6,6 @@
     "description": "Specification JSONs: [v2](/api-spec/v2), [v3](/api-spec/v3)."
   },
   "paths": {
-    "/api/": {
-      "get": {
-        "summary": "/api/",
-        "responses": {},
-        "tags": []
-      }
-    },
     "/api/signup": {
       "post": {
         "summary": "/api/signup",
@@ -86,6 +79,22 @@
         ]
       }
     },
+    "/api/latency": {
+      "get": {
+        "summary": "/api/latency",
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "tags": [],
+        "security": [
+          {
+            "authorization": []
+          }
+        ]
+      }
+    },
     "/api/user/{id}": {
       "get": {
         "summary": "/api/user/{id}",
@@ -108,6 +117,89 @@
       "get": {
         "summary": "/api/users",
         "responses": {},
+        "tags": []
+      }
+    },
+    "/api/status": {
+      "get": {
+        "summary": "/api/status",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "OK"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": []
+      }
+    },
+    "/api/": {
+      "get": {
+        "summary": "/api/",
+        "responses": {},
+        "tags": []
+      }
+    },
+    "/status": {
+      "get": {
+        "summary": "/status",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "OK"
+                    }
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "OK"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "example": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot GET /api/status</pre>\n</body>\n</html>\n"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "example": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot GET /api/status</pre>\n</body>\n</html>\n"
+                }
+              }
+            }
+          }
+        },
         "tags": []
       }
     }

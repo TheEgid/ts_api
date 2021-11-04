@@ -6,26 +6,17 @@ import httpContext from "express-http-context";
 import config from "config";
 import { OpenAPIV2 } from "openapi-types";
 import expressOasGenerator, { SPEC_OUTPUT_FILE_BEHAVIOR } from "express-oas-generator";
+import createHealthcheckMiddleware from "healthcheck-ping";
 import * as fs from "fs";
 import UserController from "./controller/user-controller";
 import SimpleController from "./controller/simple-controller";
-import DatabaseConnectionFacade from "./database/database-connection";
 import { createExpressServer } from "routing-controllers";
 import { authorizationChecker } from "./auth/authorization-checker";
+import dbConnect from "./database/database-connect";
 
 dotenv.config();
 
-DatabaseConnectionFacade.multipleConnections()
-  .then(() => {
-    console.log("⛏ [database]: Postgres is running");
-  })
-  .catch((error) => {
-    console.log("🚧 [database] Postgres Error: ".concat(error as string));
-  });
-
-// Создаем приложение Express
 const app = createExpressServer({
-  // Префикс
   authorizationChecker: authorizationChecker,
 
   routePrefix: process.env.SERVER_PREFIX,
@@ -47,8 +38,6 @@ const app = createExpressServer({
   },
 }) as Express;
 
-// const app: Express = express();
-
 const openAPIFilePath = "src/swagger/swagger.json";
 
 const redefinedSpec = JSON.parse(
@@ -67,9 +56,11 @@ expressOasGenerator.handleResponses(app, {
 // setup the logger
 app.use(morgan("dev"));
 
-const port: number = config.get("PORT");
 app.use(bodyParser.json());
+
 app.use(httpContext.middleware);
+app.use(httpContext.middleware);
+app.use(createHealthcheckMiddleware("api/status"));
 
 expressOasGenerator.handleRequests();
 
@@ -79,4 +70,17 @@ expressOasGenerator.handleRequests();
 //   next();
 // });
 
-app.listen(port, () => console.log(`↯ [server]: Server is running at http://localhost:${port}`));
+dbConnect
+  .getConnection()
+  .then(() => {
+    console.log("⛏ [database]: Postgres is running");
+  })
+  .catch((error) => {
+    console.log("🚧 [database] Postgres Error: ".concat(error as string));
+  });
+
+const port: number = config.get("PORT");
+
+const server = app.listen(port, () => console.log(`Running on port ${port}`));
+
+export default server;

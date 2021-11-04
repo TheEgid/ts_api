@@ -2,7 +2,6 @@ import {
   Authorized,
   Body,
   Get,
-  Header,
   JsonController,
   NotFoundError,
   Post,
@@ -14,6 +13,7 @@ import UserService from "../services/user-service";
 import User from "../models/user-entity";
 import { Request } from "express";
 import { StatusCodes } from "http-status-codes";
+import { IPingResult } from "@network-utils/tcp-ping";
 
 @JsonController()
 export default class UserController {
@@ -23,19 +23,9 @@ export default class UserController {
     this.userService = new UserService();
   }
 
-  @Get("/")
-  // Протестировано добавление заголовков
-  @Header("Access-Control-Allow-Origin", "*")
-  @Header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept, X-Access-Token"
-  )
-  getStart() {
-    return { message: process.env.SERVER_MSG };
-  }
-
   // Регистрация пользователя
   @Post("/signup")
+  @OnUndefined(StatusCodes.BAD_REQUEST)
   async registrateUser(@Body() user: User): Promise<string> {
     const responseSignup = await this.userService.userSignup(user);
     if (responseSignup !== process.env.USER_SERVICE_RESPONSE) {
@@ -46,6 +36,7 @@ export default class UserController {
   }
 
   @Post("/signin")
+  @OnUndefined(StatusCodes.BAD_REQUEST)
   async login(@Body() user: User): Promise<string> {
     const responseSignin = await this.userService.userSignin(user);
     if (responseSignin !== process.env.USER_SERVICE_RESPONSE) {
@@ -56,11 +47,18 @@ export default class UserController {
   }
 
   // Возвращает авторизированного пользователя
+  @Authorized()
   @Get("/info")
   @OnUndefined(StatusCodes.BAD_REQUEST)
-  @Authorized()
   async getId(@Req() req: Request): Promise<User> {
     return await this.userService.getUserInfo(req);
+  }
+
+  // Время задержки сервера
+  @Authorized()
+  @Get("/latency")
+  async getPing(): Promise<IPingResult> {
+    return await this.userService.getLatency();
   }
 }
 
@@ -102,4 +100,15 @@ export default class UserController {
 //   console.log(JSON.stringify(info));
 //   console.log(`tracedId = ${httpContext.get("traceId") as string}`);
 // }
+// }
+
+// @Get("/")
+// // Протестировано добавление заголовков
+// @Header("Access-Control-Allow-Origin", "*")
+// @Header(
+//   "Access-Control-Allow-Headers",
+//   "Origin, X-Requested-With, Content-Type, Accept, X-Access-Token"
+// )
+// getStart() {
+//   return { message: "Server is running" };
 // }

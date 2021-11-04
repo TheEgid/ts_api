@@ -18,7 +18,7 @@
     "lint": "eslint **/*.ts --color",
     "fmt": "yarn run lint:fix",
     "lint:fix": "eslint **/*.ts --fix",
-    "test:unit": "jest --config=jest.unit.config.js"
+    "test": "jest --config=jest.config.js --forceExit"
   },
   "dependencies": {
     "body-parser": "^1.19.0",
@@ -42,6 +42,7 @@
   },
   "private": true,
   "devDependencies": {
+    "@network-utils/tcp-ping": "^1.2.1",
     "@types/config": "0.0.38",
     "@types/cors": "^2.8.9",
     "@types/eslint-config-prettier": "^6.11.0",
@@ -60,6 +61,8 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-promise": "^5.1.1",
+    "healthcheck-ping": "^2.0.1",
+    "http-terminator": "^3.0.3",
     "jest": "^27.3.1",
     "prettier": "^2.4.1",
     "react": "^17.0.2",
