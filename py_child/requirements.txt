@@ -1,0 +1,5 @@
+argparse==1.4.0
+fleep==1.0.1
+pikepdf==4.0.0
+pdf2docx==0.5.2
+docx==0.2.4
