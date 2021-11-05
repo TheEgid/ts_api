@@ -78,32 +78,8 @@ export default class UserService {
 //   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
 //   const [, token] = action.request.headers.authorization.split(" ", 2);
 //   const curUser = await TokenService.getUser(token as string);
-//
-// getLatency(): Promise<IPingResult> {
-//   function update(progress: number, total: number): void {
-//     console.log(progress, "/", total);
-//   }
-//
-//   // Метод такой-себе если честно, для ознакомления думаю покатит:)
-//   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-//   const latency = ping(
-//     {
-//       address: process.env.PING_ADRESS,
-//       attempts: Number(process.env.PING_ATTEMPTS),
-//       port: Number(process.env.PING_PORT),
-//       timeout: Number(process.env.PING_TIMEOUT),
-//     },
-//     update
-//   ).then((result) => {
-//     console.log("ping result:", result);
-//     return result;
-//   });
-//
-//   return latency;
-// }
-//
+
 // async userLogout(all: boolean, req: express.Request): Promise<void> {
-//   // Создаем Mongo repository
 //   const repository = getMongoRepository(User);
 //   // Поиск по текущему токену
 //   const user = await this.findUser(req, repository);
