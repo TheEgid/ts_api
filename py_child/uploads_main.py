@@ -1,6 +1,6 @@
-import argparse
 import logging
 import json
+import sys
 from utils import pdf_process, get_file_content
 
 
@@ -12,16 +12,6 @@ class DisableLogger:
 
     def __exit__(self, exit_type, exit_value, exit_traceback):
         logging.disable(logging.NOTSET)
-
-
-def get_args_parser():
-    formatter_class = argparse.ArgumentDefaultsHelpFormatter
-    parser = argparse.ArgumentParser(formatter_class=formatter_class)
-    parser.add_argument(
-        '--pdf_filepath',
-        type=str,
-    )
-    return parser
 
 
 def file_processor(pdf_filepath):
@@ -41,7 +31,8 @@ def file_processor(pdf_filepath):
             })
 
 
-if __name__ == '__main__':
-     args = get_args_parser().parse_args()
-     document = file_processor(args.pdf_filepath)
-     print(document)
+if __name__ == "__main__":
+    if len(sys.argv) > 1:
+        document = " ".join(sys.argv[1:])
+        document = file_processor(document.strip())
+        print(document)

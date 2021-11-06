@@ -1,7 +1,7 @@
 import { getConnection } from "typeorm";
 import User from "../models/user-entity";
 import { Request } from "express";
-import TokenRepository from "../repos/tokens-repository";
+// import TokenRepository from "../repos/tokens-repository";
 import UsersRepository from "../repos/users-repository";
 import TokenService from "./token-service";
 import { IPingResult, ping } from "@network-utils/tcp-ping";
@@ -9,6 +9,19 @@ import { IPingResult, ping } from "@network-utils/tcp-ping";
 export default class UserService {
   static async getUsers(): Promise<User[]> {
     return await getConnection(process.env.DB_NAME).getCustomRepository(UsersRepository).findAll();
+  }
+
+  // Регистрация пользователя
+  async userSignup(newUser: User): Promise<string> {
+    const usersRepository = getConnection(process.env.DB_NAME).getCustomRepository(UsersRepository);
+    const userRepeat = await usersRepository.findByEmail(newUser.email);
+    if (!userRepeat) {
+      newUser = await TokenService.setToken(newUser);
+      await usersRepository.save(newUser);
+      return newUser.token.refreshToken;
+    } else {
+      return process.env.USER_SERVICE_RESPONSE;
+    }
   }
 
   async userSignin(user: User): Promise<string> {
@@ -19,23 +32,11 @@ export default class UserService {
     );
 
     if (userEmail) {
-      userEmail = await UserService.setToken(userEmail); // await
+      userEmail = await TokenService.setToken(userEmail);
       await usersRepository.save(userEmail);
-      return userEmail.token.accessToken;
+      return userEmail.token.refreshToken;
     }
     return process.env.USER_SERVICE_RESPONSE; // error
-  }
-
-  async userSignup(newUser: User): Promise<string> {
-    const usersRepository = getConnection(process.env.DB_NAME).getCustomRepository(UsersRepository);
-    const userRepeat = await usersRepository.findByEmail(newUser.email);
-    if (!userRepeat) {
-      newUser = await UserService.setToken(newUser);
-      await usersRepository.save(newUser);
-      return newUser.token.accessToken;
-    } else {
-      return process.env.USER_SERVICE_RESPONSE;
-    }
   }
 
   async getUserInfo(req: Request): Promise<User> {
@@ -65,12 +66,6 @@ export default class UserService {
       console.log("ping result:", result);
       return result;
     });
-  }
-
-  private static async setToken(user: User): Promise<User> {
-    const token: TokenRepository = new TokenRepository(); // CH to service
-    user.token = await token.generate();
-    return user;
   }
 }
 

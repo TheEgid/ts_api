@@ -112,3 +112,37 @@ export default class UserController {
 // getStart() {
 //   return { message: "Server is running" };
 // }
+
+/**
+ * Envoie un email
+ * @param subject l'objet du mail
+ * @param text le corps du mail
+ * @param to la liste des destinatire (email séparés par des )
+ * @param from l'adresse utilisé pour envoyer le mail
+ */
+
+// export function sendEmail(subject: string, text: string, to, from = "system@absolumentg.fr") {
+//   const transport = nodemailer.createTransport({
+//     host: process.env.SMTP_HOST,
+//     port: process.env.SMTP_PORT,
+//     secure: true,
+//     auth: {
+//       user: process.env.SMTP_USER,
+//       pass: process.env.SMTP_PASS
+//     }
+//   });
+//
+//   const email = {
+//     from,
+//     to,
+//     subject,
+//     text
+//   };
+//   transport.sendMail(email, function(err, info) {
+//     if (err) {
+//       logger.error("Erreur lors de l'envoie d'email", err);
+//     } else {
+//       logger.info("Email envoyé", info);
+//     }
+//   });
+// }

@@ -21,8 +21,8 @@ export default class Token {
     if (!this.id) {
       this.id = Id;
     }
-    if (!this.accessToken) {
-      this.accessToken = Id;
+    if (!this.refreshToken) {
+      this.refreshToken = Id;
     }
   }
 }

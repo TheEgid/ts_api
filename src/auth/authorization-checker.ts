@@ -1,19 +1,21 @@
+import { Request } from "express";
 import { Action, UnauthorizedError } from "routing-controllers";
 import TokenService from "../services/token-service";
 
-// interface ResponseHeaders {
-//   "content-type": string;
-//   ["token": string]: string; // you could set more explicit headers names or even remove the above and set just this line
-// }
+interface IResponseHeaders {
+  token: string;
+}
+
+type ResponseHeaders = string[] & IResponseHeaders;
 
 export async function authorizationChecker(action: Action): Promise<boolean> {
-  // https://github.com/sc372/simple-blog-app-react-node/blob/6039a6716233219d4d043742702a9eb1d8999506/backend/src/helpers/current_user_checker.helper.ts
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-  if (action.request.headers.authorization) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
-    const [, token] = action.request.headers.authorization.split(" ", 2);
-    const curUser = await TokenService.getUserByToken(token as string);
-    if (curUser !== undefined) {
+  const actionRequest = action.request as Request;
+  const authorizationHeader = actionRequest.headers.authorization;
+  if (authorizationHeader) {
+    const header = authorizationHeader.split(" ", 2) as ResponseHeaders;
+    const [, token] = header;
+    const curUser = await TokenService.getUserByToken(token);
+    if (curUser.id !== undefined) {
       return true;
     }
   } else {
