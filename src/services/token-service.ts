@@ -13,7 +13,7 @@ export default class TokenService {
   }
 
   static async setToken(user: User): Promise<User> {
-    const token: TokenRepository = new TokenRepository(); // CH to service
+    const token: TokenRepository = new TokenRepository();
     user.token = await token.generate();
     return user;
   }

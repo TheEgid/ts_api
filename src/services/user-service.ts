@@ -15,26 +15,29 @@ export default class UserService {
   async userSignup(newUser: User): Promise<string> {
     const usersRepository = getConnection(process.env.DB_NAME).getCustomRepository(UsersRepository);
     const userRepeat = await usersRepository.findByEmail(newUser.email);
+    console.log(userRepeat);
     if (!userRepeat) {
       newUser = await TokenService.setToken(newUser);
       await usersRepository.save(newUser);
-      return newUser.token.refreshToken;
+      return newUser.token.accessToken;
     } else {
-      return process.env.USER_SERVICE_RESPONSE;
+      return `Already logged as ${newUser.email}`;
     }
   }
 
   async userSignin(user: User): Promise<string> {
     const usersRepository = getConnection(process.env.DB_NAME).getCustomRepository(UsersRepository);
-    let userEmail = await usersRepository.findByEmailHashedPassword(
-      user.email,
-      user.hashedPassword
-    );
-
-    if (userEmail) {
-      userEmail = await TokenService.setToken(userEmail);
-      await usersRepository.save(userEmail);
-      return userEmail.token.refreshToken;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    let oldUser = await usersRepository.findByEmailHashedPassword(user.email, user.hashedPassword);
+    console.log(oldUser);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    if (oldUser.id !== undefined) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      oldUser = await TokenService.setToken(oldUser);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      await usersRepository.save(oldUser);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return
+      return oldUser.token.refreshToken;
     }
     return process.env.USER_SERVICE_RESPONSE; // error
   }

@@ -1,4 +1,5 @@
-import { Repository, EntityRepository, getConnection } from "typeorm";
+import { EntityRepository, getConnection, Repository } from "typeorm";
+import argon2 from "argon2";
 import IUsersRepository from "./users-repository-interface";
 import User from "../models/user-entity";
 
@@ -15,8 +16,13 @@ class UsersRepository implements IUsersRepository {
   }
 
   public async findByEmailHashedPassword(email: string, hashedPassword: string): Promise<User> {
+    const user = await this.findByEmail(email);
+    const valid = await argon2.verify(user.hashedPassword, hashedPassword);
+    if (valid === false) {
+      return undefined;
+    }
     return await this.ormRepository.findOne({
-      where: { email, hashedPassword },
+      where: { email },
       withDeleted: false,
     });
   }
@@ -33,6 +39,9 @@ class UsersRepository implements IUsersRepository {
   }
 
   public async save(user: User): Promise<User> {
+    if (user.hashedPassword.startsWith("$argon2i$v=19$m=4096,t=3,p=1$") === false) {
+      user.hashedPassword = await argon2.hash(user.hashedPassword);
+    }
     return await this.ormRepository.save(user);
   }
 
@@ -48,3 +57,5 @@ class UsersRepository implements IUsersRepository {
 }
 
 export default UsersRepository;
+
+// https://temofeev.ru/info/articles/rukovodstvo-po-autentifikatsii-v-node-js-bez-passport-js-i-storonnikh-servisov/
