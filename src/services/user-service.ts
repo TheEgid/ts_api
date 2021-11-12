@@ -73,6 +73,11 @@ export default class UserService {
       await TokenRepo.remove(token);
     }
   }
+
+  async deleteLastUser(): Promise<void> {
+    const UserRepo = getConnection(process.env.DB_NAME).getCustomRepository(UsersRepository);
+    await UserRepo.removeLast();
+  }
 }
 
 // const usersRepository = getConnection(process.env.DB_NAME).getCustomRepository(UsersRepository);

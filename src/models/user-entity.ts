@@ -20,7 +20,8 @@ export default class User {
 
   @IsEmail()
   @Column({
-    length: 60,
+    length: 160,
+    unique: true,
   })
   email: string;
 

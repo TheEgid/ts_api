@@ -13,6 +13,9 @@ class UsersRepository implements IUsersRepository {
 
   public async findByEmailHashedPassword(email: string, hashedPassword: string): Promise<User> {
     const user = await this.findByEmail(email);
+    if (!(user instanceof User)) {
+      return undefined;
+    }
     const valid = await argon2.verify(user.hashedPassword, hashedPassword);
     if (valid === false) {
       return undefined;
@@ -35,6 +38,7 @@ class UsersRepository implements IUsersRepository {
   }
 
   public async save(userData: User): Promise<User> {
+    // const curUser = await this.findByEmail(userData.email);
     if (userData.hashedPassword.startsWith("$argon2i$v=19$m=4096,t=3,p=1$") === false) {
       userData.hashedPassword = await argon2.hash(userData.hashedPassword);
     }
@@ -47,8 +51,9 @@ class UsersRepository implements IUsersRepository {
     return user;
   }
 
-  public async remove(userData: User): Promise<void> {
-    await this.ormRepository.delete(userData);
+  public async removeLast(): Promise<void> {
+    const user: User = await this.ormRepository.findOne({ order: { id: "DESC" } });
+    await this.ormRepository.delete(user.id);
   }
 }
 

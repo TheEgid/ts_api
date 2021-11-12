@@ -22,6 +22,7 @@ class TokenRepository implements ITokenRepository {
       Date.now() + Number(process.env.TO_SECONDS) * Number(process.env.TO_MINUTES)
     ).toISOString();
     const Token = this.ormRepository.create({
+      id: uuid(),
       accessToken: uuid(),
       refreshToken: uuid(),
       timeKill: timekiller,

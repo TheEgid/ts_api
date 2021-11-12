@@ -7,6 +7,8 @@ import {
   Post,
   Req,
   OnUndefined,
+  Param,
+  Delete,
 } from "routing-controllers";
 import UserService from "../services/user-service";
 import User from "../models/user-entity";
@@ -48,6 +50,7 @@ export default class UserController {
 
   // Возвращает авторизированного пользователя
   @Authorized()
+  @OnUndefined(StatusCodes.BAD_REQUEST)
   @Get("/info")
   async getId(@Req() req: Request): Promise<User> {
     return await this.userService.getUserInfo(req);
@@ -55,6 +58,7 @@ export default class UserController {
 
   // Время задержки сервера
   @Authorized()
+  @OnUndefined(StatusCodes.BAD_REQUEST)
   @Get("/latency")
   async getPing(): Promise<IPingResult> {
     return await this.userService.getLatency();
@@ -64,6 +68,14 @@ export default class UserController {
   @Get("/logout")
   async logout(@Req() req: Request): Promise<void> {
     return await this.userService.userLogout(req);
+  }
+
+  @Delete("/delete-last-user/:key")
+  @OnUndefined(StatusCodes.OK)
+  public async deleteLastUser(@Param("key") key: string): Promise<void> {
+    if (key === process.env.ACCESS_DELETE_KEY) {
+      return await this.userService.deleteLastUser();
+    }
   }
 }
 
@@ -79,18 +91,6 @@ export default class UserController {
 //       .findById(id);
 //   }
 //
-
-// public async getUsers() {
-//   return await getConnection(process.env.DB_NAME).getCustomRepository(UsersRepository).findAll();
-// }
-
-// return await getConnection(process.env.DB_NAME)
-//   .getRepository(User)
-//   .findOne({ where: { id: id } });
-
-// getOne(@Param("id") id: number) {
-//   console.log("do something in GET function...");
-//   console.log(id);
 
 //   connection()
 // DatabaseConnectionFacade.multipleConnections().then(() =>
