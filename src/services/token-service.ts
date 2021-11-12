@@ -3,7 +3,7 @@ import User from "../models/user-entity";
 import TokenRepository from "../repos/tokens-repository";
 
 export default class TokenService {
-  static async getUserByToken(accessToken: string): Promise<User> | undefined {
+  static async getUserByToken(accessToken: string): Promise<User> {
     return await getConnection(process.env.DB_NAME)
       .getRepository(User)
       .createQueryBuilder("user")

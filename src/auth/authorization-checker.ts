@@ -1,6 +1,8 @@
 import { Request } from "express";
-import { Action, UnauthorizedError } from "routing-controllers";
+import { Action } from "routing-controllers";
 import TokenService from "../services/token-service";
+import { Unauthorized } from "http-json-errors";
+import User from "../models/user-entity";
 
 interface IResponseHeaders {
   token: string;
@@ -15,11 +17,11 @@ export async function authorizationChecker(action: Action): Promise<boolean> {
     const header = authorizationHeader.split(" ", 2) as ResponseHeaders;
     const [, token] = header;
     const curUser = await TokenService.getUserByToken(token);
-    if (curUser.id !== undefined) {
+    if (curUser instanceof User) {
       return true;
     }
   } else {
-    throw new UnauthorizedError("No token.");
+    throw new Unauthorized("Unauthorized");
   }
   return false;
 }

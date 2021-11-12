@@ -6,7 +6,6 @@ import {
   NotFoundError,
   Post,
   Req,
-  UnauthorizedError,
   OnUndefined,
 } from "routing-controllers";
 import UserService from "../services/user-service";
@@ -14,6 +13,7 @@ import User from "../models/user-entity";
 import { Request } from "express";
 import { StatusCodes } from "http-status-codes";
 import { IPingResult } from "@network-utils/tcp-ping";
+import { BadRequest } from "http-json-errors";
 
 @JsonController()
 export default class UserController {
@@ -26,18 +26,18 @@ export default class UserController {
   // Регистрация пользователя
   @Post("/signup")
   @OnUndefined(StatusCodes.BAD_REQUEST)
-  async registrateUser(@Body() user: User): Promise<string> {
+  async registrateUser(@Body() user: User): Promise<string | Error> {
     const responseSignup = await this.userService.userSignup(user);
     if (responseSignup !== process.env.USER_SERVICE_RESPONSE) {
       return responseSignup;
     } else {
-      throw new UnauthorizedError(process.env.POST_SIGNUP_MASSAGE);
+      throw new BadRequest(process.env.POST_SIGNUP_MASSAGE);
     }
   }
 
   @Post("/signin")
   @OnUndefined(StatusCodes.BAD_REQUEST)
-  async login(@Body() user: User): Promise<string> {
+  async login(@Body() user: User): Promise<string | Error> {
     const responseSignin = await this.userService.userSignin(user);
     if (responseSignin !== process.env.USER_SERVICE_RESPONSE) {
       return responseSignin;
@@ -49,7 +49,6 @@ export default class UserController {
   // Возвращает авторизированного пользователя
   @Authorized()
   @Get("/info")
-  @OnUndefined(StatusCodes.BAD_REQUEST)
   async getId(@Req() req: Request): Promise<User> {
     return await this.userService.getUserInfo(req);
   }

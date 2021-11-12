@@ -1,10 +1,10 @@
 import { getConnection } from "typeorm";
 import User from "../models/user-entity";
 import { Request } from "express";
-// import TokenRepository from "../repos/tokens-repository";
 import UsersRepository from "../repos/users-repository";
 import TokenService from "./token-service";
 import { IPingResult, ping } from "@network-utils/tcp-ping";
+import { Unauthorized, NotAcceptable } from "http-json-errors";
 
 export default class UserService {
   static async getUsers(): Promise<User[]> {
@@ -12,34 +12,28 @@ export default class UserService {
   }
 
   // Регистрация пользователя
-  async userSignup(newUser: User): Promise<string> {
+  async userSignup(newUser: User): Promise<string | Error> {
     const usersRepository = getConnection(process.env.DB_NAME).getCustomRepository(UsersRepository);
     const userRepeat = await usersRepository.findByEmail(newUser.email);
-    console.log(userRepeat);
-    if (!userRepeat) {
+    if (!(userRepeat instanceof User)) {
       newUser = await TokenService.setToken(newUser);
       await usersRepository.save(newUser);
       return newUser.token.accessToken;
     } else {
-      return `Already logged as ${newUser.email}`;
+      throw new NotAcceptable(`Already logged as ${newUser.email}`);
     }
   }
 
-  async userSignin(user: User): Promise<string> {
+  async userSignin(user: User): Promise<string | Error> {
     const usersRepository = getConnection(process.env.DB_NAME).getCustomRepository(UsersRepository);
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     let oldUser = await usersRepository.findByEmailHashedPassword(user.email, user.hashedPassword);
-    console.log(oldUser);
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    if (oldUser.id !== undefined) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+    if (oldUser instanceof User) {
       oldUser = await TokenService.setToken(oldUser);
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       await usersRepository.save(oldUser);
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return
       return oldUser.token.refreshToken;
+    } else {
+      throw new Unauthorized("Wrong Password or Username");
     }
-    return process.env.USER_SERVICE_RESPONSE; // error
   }
 
   async getUserInfo(req: Request): Promise<User> {
