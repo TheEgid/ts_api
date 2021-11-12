@@ -39,6 +39,14 @@ class TokenRepository implements ITokenRepository {
   public async findAll(): Promise<Token[]> {
     return await this.ormRepository.find();
   }
-}
 
+  public async remove(token: string): Promise<void> {
+    await this.ormRepository
+      .createQueryBuilder()
+      .update(Token)
+      .set({ refreshToken: "" })
+      .where("refreshToken = :refreshToken", { refreshToken: token })
+      .execute();
+  }
+}
 export default TokenRepository;

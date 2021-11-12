@@ -59,6 +59,12 @@ export default class UserController {
   async getPing(): Promise<IPingResult> {
     return await this.userService.getLatency();
   }
+
+  @Authorized()
+  @Get("/logout")
+  async logout(@Req() req: Request): Promise<void> {
+    return await this.userService.userLogout(req);
+  }
 }
 
 // @Controller()

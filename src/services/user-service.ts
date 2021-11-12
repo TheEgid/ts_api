@@ -5,6 +5,7 @@ import UsersRepository from "../repos/users-repository";
 import TokenService from "./token-service";
 import { IPingResult, ping } from "@network-utils/tcp-ping";
 import { Unauthorized, NotAcceptable } from "http-json-errors";
+import TokenRepository from "../repos/tokens-repository";
 
 export default class UserService {
   static async getUsers(): Promise<User[]> {
@@ -18,7 +19,7 @@ export default class UserService {
     if (!(userRepeat instanceof User)) {
       newUser = await TokenService.setToken(newUser);
       await usersRepository.save(newUser);
-      return newUser.token.accessToken;
+      return newUser.token.refreshToken;
     } else {
       throw new NotAcceptable(`Already logged as ${newUser.email}`);
     }
@@ -64,28 +65,35 @@ export default class UserService {
       return result;
     });
   }
+
+  async userLogout(req: Request): Promise<void> {
+    const TokenRepo = getConnection(process.env.DB_NAME).getCustomRepository(TokenRepository);
+    if (req.get(process.env.HEADER_AUTH)) {
+      const [, token] = req.headers.authorization.split(" ", 2);
+      await TokenRepo.remove(token);
+    }
+  }
 }
 
-// if (action.request.headers.authorization) {
-//   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
-//   const [, token] = action.request.headers.authorization.split(" ", 2);
-//   const curUser = await TokenService.getUser(token as string);
+// const usersRepository = getConnection(process.env.DB_NAME).getCustomRepository(UsersRepository);
+// if (req.get(process.env.HEADER_AUTH)) {
+// const [, token] = req.headers.authorization.split(" ", 2);
+// const curUser = await usersRepository.findByToken(token);
+// await usersRepository.remove(curUser);
 
-// async userLogout(all: boolean, req: express.Request): Promise<void> {
-//   const repository = getMongoRepository(User);
-//   // Поиск по текущему токену
-//   const user = await this.findUser(req, repository);
+// const repository = getMongoRepository(User);
+// // Поиск по текущему токену
+// const user = await this.findUser(req, repository);
 //
-//   if (all) {
-//     // Если true удаляем(заменяем пустыми, что тоже так себе. Опять же тупо с Mongo не очень удобно работать, так проще всего было. Так метод Update юзал) все токены
-//     user.token.accessToken = process.env.GET_LOGOUT_TOKEN;
-//     user.token.refreshToken = process.env.GET_LOGOUT_TOKEN;
-//     // Сохраняем изменения
-//     repository.save(user);
-//   } else {
-//     // Если false удаляем только текущий
-//     user.token.accessToken = process.env.GET_LOGOUT_TOKEN;
-//     // Сохраняем изменения
-//     repository.save(user);
-//   }
+// if (all) {
+//   // Если true удаляем(заменяем пустыми, что тоже так себе. Опять же тупо с Mongo не очень удобно работать, так проще всего было. Так метод Update юзал) все токены
+//   user.token.accessToken = process.env.GET_LOGOUT_TOKEN;
+//   user.token.refreshToken = process.env.GET_LOGOUT_TOKEN;
+//   return await TokenService.getUserByToken(token);
+//   // repository.save(user);
+// } else {
+//   // Если false удаляем только текущий
+//   user.token.accessToken = process.env.GET_LOGOUT_TOKEN;
+//   // Сохраняем изменения
+//   repository.save(user);
 // }

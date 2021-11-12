@@ -1,7 +1,7 @@
 import { EntityRepository, getConnection, Repository } from "typeorm";
-import argon2 from "argon2";
 import IUsersRepository from "./users-repository-interface";
 import User from "../models/user-entity";
+import argon2 from "argon2";
 
 @EntityRepository(User)
 class UsersRepository implements IUsersRepository {
@@ -9,10 +9,6 @@ class UsersRepository implements IUsersRepository {
 
   constructor() {
     this.ormRepository = getConnection(process.env.DB_NAME).getRepository(User);
-  }
-
-  public async findById(id: string): Promise<User | undefined> {
-    return await this.ormRepository.findOne(id);
   }
 
   public async findByEmailHashedPassword(email: string, hashedPassword: string): Promise<User> {
@@ -38,11 +34,11 @@ class UsersRepository implements IUsersRepository {
     });
   }
 
-  public async save(user: User): Promise<User> {
-    if (user.hashedPassword.startsWith("$argon2i$v=19$m=4096,t=3,p=1$") === false) {
-      user.hashedPassword = await argon2.hash(user.hashedPassword);
+  public async save(userData: User): Promise<User> {
+    if (userData.hashedPassword.startsWith("$argon2i$v=19$m=4096,t=3,p=1$") === false) {
+      userData.hashedPassword = await argon2.hash(userData.hashedPassword);
     }
-    return await this.ormRepository.save(user);
+    return await this.ormRepository.save(userData);
   }
 
   public async create(userData: User): Promise<User> {
@@ -51,8 +47,8 @@ class UsersRepository implements IUsersRepository {
     return user;
   }
 
-  public async remove(id: string): Promise<void> {
-    await this.ormRepository.delete(id);
+  public async remove(userData: User): Promise<void> {
+    await this.ormRepository.delete(userData);
   }
 }
 
