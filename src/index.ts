@@ -3,7 +3,6 @@ import { Express } from "express";
 import bodyParser from "body-parser";
 import morgan from "morgan";
 import httpContext from "express-http-context";
-import config from "config";
 import createHealthcheckMiddleware from "healthcheck-ping";
 import UserController from "./controller/user-controller";
 import SimpleController from "./controller/simple-controller";
@@ -18,7 +17,7 @@ const app = createExpressServer({
   authorizationChecker: authorizationChecker,
 
   routePrefix: process.env.SERVER_PREFIX,
-  // Инициализируем ошибки
+
   defaults: {
     nullResultCode: Number(process.env.ERROR_NULL_RESULT_CODE),
     undefinedResultCode: Number(process.env.ERROR_NULL_UNDEFINED_RESULT_CODE),
@@ -55,9 +54,10 @@ dbConnect
   })
   .catch((error) => {
     console.log("🚧 [database] Postgres Error: ".concat(error as string));
-  });
+  })
+  .finally(() => console.log(`⚙ [${process.env.APP_ENV}]: environment`));
 
-const port: number = config.get("PORT");
+const port = process.env.SERVER_PORT as unknown as number;
 
 const server = app.listen(port, () => console.log(`Running on port ${port}`));
 

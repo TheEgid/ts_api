@@ -1,4 +1,4 @@
-// process.env.NODE_ENV = 'UNITTEST';
+process.env.APP_ENV='test';
 
 module.exports = {
     testEnvironment: 'node',
