@@ -43,8 +43,5 @@ export default class User {
     if (!this.id) {
       this.id = Id;
     }
-    if (!this.id) {
-      this.id = Id;
-    }
   }
 }

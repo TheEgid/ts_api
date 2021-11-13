@@ -23,7 +23,6 @@ class DatabaseConnect {
 
     if (this.connectionManager.has(process.env.DB_NAME)) {
       console.log(`Using existing connection ...`);
-
       connection = getConnection(process.env.DB_NAME);
 
       if (!connection.isConnected) {
@@ -44,40 +43,36 @@ class DatabaseConnect {
       synchronize: true,
       type: "postgres",
       logging: true,
-      name: process.env.DB_NAME,
-      url: process.env.DEV_DATABASE_URL,
     };
 
-    const configConnection = {};
-    // // switch (process.env.APP_ENV) {
-    // //     case 'stg': {
-    // //         configConnection = {
-    // //             host: process.env.TYPEORM_HOST_STG,
-    // //             username: process.env.TYPEORM_USERNAME_STG,
-    // //             database: process.env.TYPEORM_DATABASE_STG,
-    // //             password: process.env.TYPEORM_PASSWORD_STG,
-    // //         }
-    // //         break
-    // //     }
-    // //     case 'dev': {
-    // //         configConnection = {
-    // //             host: process.env.TYPEORM_HOST_DEV,
-    // //             username: process.env.TYPEORM_USERNAME_DEV,
-    // //             database: process.env.TYPEORM_DATABASE_DEV,
-    // //             password: process.env.TYPEORM_PASSWORD_DEV,
-    // //         }
-    // //         break
-    // //     }
-    // //     case 'prod': {
-    // //         configConnection = {
-    // //             host: process.env.TYPEORM_HOST_PROD,
-    // //             username: process.env.TYPEORM_USERNAME_PROD,
-    // //             database: process.env.TYPEORM_DATABASE_PROD,
-    // //             password: process.env.TYPEORM_PASSWORD_PROD,
-    // //         }
-    // //         break
-    // //     }
-    // }
+    let configConnection = {};
+
+    switch (process.env.APP_ENV) {
+      case "test": {
+        process.env.DB_NAME = process.env.DB_NAME_TEST;
+        configConnection = {
+          name: process.env.DB_NAME_TEST,
+          url: process.env.DB_URL_TEST,
+        };
+        break;
+      }
+      case "dev": {
+        process.env.DB_NAME = process.env.DB_NAME_DEV;
+        configConnection = {
+          name: process.env.DB_NAME_DEV,
+          url: process.env.DB_URL_DEV,
+        };
+        break;
+      }
+      case "prod": {
+        process.env.DB_NAME = process.env.DB_NAME_PROD;
+        configConnection = {
+          name: process.env.DB_NAME_PROD,
+          url: process.env.DB_URL_PROD,
+        };
+        break;
+      }
+    }
     Object.assign(connectionOptions, configConnection);
 
     return await createConnection(connectionOptions);
