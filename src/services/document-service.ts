@@ -15,8 +15,8 @@ const wrapperPython: (commandPy: string) => Promise<IEndpoint> = async (commandP
 };
 
 const fileProcess: (filePath: string) => Promise<IEndpoint> = async (filePath: string) => {
-  const commandPython =
-    "python " + path.join(__dirname, "../..", "py_child", "uploads_main.py") + ` ${filePath}`;
+  const commandPath = path.join(__dirname, "../..", "py_child", "uploads_main.py");
+  const commandPython = `python ${commandPath} ${filePath}`;
   return await wrapperPython(commandPython);
 };
 
