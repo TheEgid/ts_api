@@ -7,7 +7,7 @@ import ControllerError from "./ControllerError";
 
 const isAdminCheck = async (request: Request): Promise<boolean> => {
   const authorizationHeader = request.headers.authorization;
-  const header = authorizationHeader.split(" ", 2) as unknown as string;
+  const header = authorizationHeader.split(" ", 2);
   const [, token] = header;
   const user = await TokenService.getUserByToken(token);
   return user.isAdmin;
