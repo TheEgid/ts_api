@@ -1,12 +1,5 @@
 import { IsEmail, MinLength } from "class-validator";
-import {
-  Entity,
-  Column,
-  JoinColumn,
-  PrimaryGeneratedColumn,
-  CreateDateColumn,
-  ManyToOne,
-} from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, OneToMany } from "typeorm";
 import Token from "./token-entity";
 
 import { v4 as uuid } from "uuid";
@@ -35,8 +28,7 @@ export default class User {
   @Column("boolean", { default: true })
   isActive = true;
 
-  @ManyToOne(() => Token)
-  @JoinColumn()
+  @OneToMany(() => Token, (token) => token.userId)
   token: Token;
 
   constructor() {

@@ -6,32 +6,36 @@ import TokenService from "./token-service";
 import { IPingResult, ping } from "@network-utils/tcp-ping";
 import { Unauthorized, NotAcceptable } from "http-json-errors";
 import TokenRepository from "../repos/tokens-repository";
+import Token from "../models/token-entity";
 
 export default class UserService {
   static async getUsers(): Promise<User[]> {
     return await getConnection(process.env.DB_NAME).getCustomRepository(UsersRepository).findAll();
   }
 
-  // Регистрация пользователя
-  async userSignup(newUser: User): Promise<string | Error> {
+  // Регистрация
+  async userSignup(newUser: User): Promise<Token> {
     const usersRepository = getConnection(process.env.DB_NAME).getCustomRepository(UsersRepository);
     const userRepeat = await usersRepository.findByEmail(newUser.email);
     if (!(userRepeat instanceof User)) {
-      newUser = await TokenService.setToken(newUser);
       await usersRepository.save(newUser);
-      return newUser.token.refreshToken;
+      await TokenService.setToken(newUser);
+      return await TokenService.getTokenByUser(newUser);
     } else {
       throw new NotAcceptable(`Already logged as ${newUser.email}`);
     }
   }
 
-  async userSignin(user: User): Promise<string | Error> {
+  // Вход
+  async userSignin(user: User): Promise<Token> {
     const usersRepository = getConnection(process.env.DB_NAME).getCustomRepository(UsersRepository);
-    let oldUser = await usersRepository.findByEmailHashedPassword(user.email, user.hashedPassword);
+    const oldUser = await usersRepository.findByEmailHashedPassword(
+      user.email,
+      user.hashedPassword
+    );
     if (oldUser instanceof User) {
-      oldUser = await TokenService.setToken(oldUser);
-      await usersRepository.save(oldUser);
-      return oldUser.token.refreshToken;
+      await TokenService.setToken(oldUser);
+      return await TokenService.getTokenByUser(oldUser);
     } else {
       throw new Unauthorized("Wrong Password or Username");
     }

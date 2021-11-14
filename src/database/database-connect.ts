@@ -7,9 +7,8 @@ import {
   getConnection,
 } from "typeorm";
 
-import Photo from "../models/photo-entity";
 import User from "../models/user-entity";
-import UserToken from "../models/token-entity";
+import Token from "../models/token-entity";
 
 class DatabaseConnect {
   private connectionManager: ConnectionManager;
@@ -39,7 +38,7 @@ class DatabaseConnect {
     console.log(`[ Creating connection ...`);
 
     const connectionOptions: ConnectionOptions = {
-      entities: [Photo, User, UserToken],
+      entities: [User, Token],
       synchronize: true,
       type: "postgres",
       logging: true,

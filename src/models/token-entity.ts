@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from "typeorm";
+import User from "./user-entity";
 import { v4 as uuid } from "uuid";
 
 const Id: string = uuid();
@@ -15,7 +16,11 @@ export default class Token {
   refreshToken: string;
 
   @Column({ type: "timestamp" })
-  timeKill: string;
+  expiresIn: string;
+
+  @JoinColumn({ name: "userId" })
+  @ManyToOne(() => User, (user) => user.token)
+  userId: User;
 
   constructor() {
     if (!this.id) {

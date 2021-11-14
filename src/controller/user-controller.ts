@@ -16,6 +16,7 @@ import { Request } from "express";
 import { StatusCodes } from "http-status-codes";
 import { IPingResult } from "@network-utils/tcp-ping";
 import { BadRequest } from "http-json-errors";
+import Token from "../models/token-entity";
 
 @JsonController()
 export default class UserController {
@@ -28,23 +29,24 @@ export default class UserController {
   // Регистрация пользователя
   @Post("/signup")
   @OnUndefined(StatusCodes.BAD_REQUEST)
-  async registrateUser(@Body() user: User): Promise<string | Error> {
-    const responseSignup = await this.userService.userSignup(user);
-    if (responseSignup !== process.env.USER_SERVICE_RESPONSE) {
-      return responseSignup;
+  async registrateUser(@Body() user: User): Promise<Token> {
+    const newtoken = await this.userService.userSignup(user);
+    console.log(newtoken);
+    if (newtoken instanceof Token) {
+      return newtoken;
     } else {
-      throw new BadRequest(process.env.POST_SIGNUP_MASSAGE);
+      throw new BadRequest("BadRequest!");
     }
   }
 
   @Post("/signin")
   @OnUndefined(StatusCodes.BAD_REQUEST)
-  async login(@Body() user: User): Promise<string | Error> {
-    const responseSignin = await this.userService.userSignin(user);
-    if (responseSignin !== process.env.USER_SERVICE_RESPONSE) {
-      return responseSignin;
+  async login(@Body() user: User): Promise<Token> {
+    const oldtoken = await this.userService.userSignin(user);
+    if (oldtoken instanceof Token) {
+      return oldtoken;
     } else {
-      throw new NotFoundError(process.env.POST_SIGNIN_MASSAGE);
+      throw new NotFoundError("User NotFoundError");
     }
   }
 
