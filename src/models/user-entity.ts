@@ -9,7 +9,7 @@ const Id: string = uuid();
 @Entity()
 export default class User {
   @PrimaryGeneratedColumn("uuid")
-  id: string;
+  readonly id: string;
 
   @IsEmail()
   @Column({
@@ -25,8 +25,11 @@ export default class User {
   @CreateDateColumn()
   createdAt: Date;
 
-  @Column("boolean", { default: true })
-  isActive = true;
+  @Column({ default: true })
+  isActive: boolean;
+
+  @Column({ default: false })
+  isAdmin: boolean;
 
   @OneToMany(() => Token, (token) => token.userId)
   token: Token;

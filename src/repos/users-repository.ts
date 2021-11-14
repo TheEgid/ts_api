@@ -38,7 +38,6 @@ class UsersRepository implements IUsersRepository {
   }
 
   public async save(userData: User): Promise<User> {
-    // const curUser = await this.findByEmail(userData.email);
     if (userData.hashedPassword.startsWith("$argon2i$v=19$m=4096,t=3,p=1$") === false) {
       userData.hashedPassword = await argon2.hash(userData.hashedPassword);
     }

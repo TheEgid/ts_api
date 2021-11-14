@@ -3,7 +3,6 @@ import {
   Body,
   Get,
   JsonController,
-  NotFoundError,
   Post,
   Req,
   OnUndefined,
@@ -15,8 +14,8 @@ import User from "../models/user-entity";
 import { Request } from "express";
 import { StatusCodes } from "http-status-codes";
 import { IPingResult } from "@network-utils/tcp-ping";
-import { BadRequest } from "http-json-errors";
 import Token from "../models/token-entity";
+import ControllerError from "./ControllerError";
 
 @JsonController()
 export default class UserController {
@@ -28,25 +27,23 @@ export default class UserController {
 
   // Регистрация пользователя
   @Post("/signup")
-  @OnUndefined(StatusCodes.BAD_REQUEST)
   async registrateUser(@Body() user: User): Promise<Token> {
     const newtoken = await this.userService.userSignup(user);
     console.log(newtoken);
     if (newtoken instanceof Token) {
       return newtoken;
     } else {
-      throw new BadRequest("BadRequest!");
+      throw new ControllerError(StatusCodes.NOT_ACCEPTABLE, `Already logged as ${user.email}`);
     }
   }
 
   @Post("/signin")
-  @OnUndefined(StatusCodes.BAD_REQUEST)
   async login(@Body() user: User): Promise<Token> {
     const oldtoken = await this.userService.userSignin(user);
     if (oldtoken instanceof Token) {
       return oldtoken;
     } else {
-      throw new NotFoundError("User NotFoundError");
+      throw new ControllerError(StatusCodes.NOT_FOUND, "Wrong Password or Username");
     }
   }
 
@@ -72,6 +69,7 @@ export default class UserController {
     return await this.userService.userLogout(req);
   }
 
+  // ????
   @Delete("/delete-last-user/:key")
   @OnUndefined(StatusCodes.OK)
   public async deleteLastUser(@Param("key") key: string): Promise<void> {

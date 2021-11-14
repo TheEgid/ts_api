@@ -7,7 +7,7 @@ const Id: string = uuid();
 @Entity()
 export default class Token {
   @PrimaryGeneratedColumn("uuid")
-  id: string;
+  readonly id: string;
 
   @Column()
   accessToken: string;

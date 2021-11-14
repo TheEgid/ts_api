@@ -5,7 +5,7 @@ import morgan from "morgan";
 import httpContext from "express-http-context";
 import createHealthcheckMiddleware from "healthcheck-ping";
 import UserController from "./controller/user-controller";
-import SimpleController from "./controller/simple-controller";
+import UserAdminController from "./controller/user-admin-controller";
 import DocumentController from "./controller/document-controller";
 import { createExpressServer } from "routing-controllers";
 import { authorizationChecker } from "./auth/authorization-checker";
@@ -26,7 +26,7 @@ const app = createExpressServer({
     },
   },
 
-  controllers: [UserController, SimpleController, DocumentController],
+  controllers: [UserController, UserAdminController, DocumentController],
   cors: {
     origin: process.env.CORS_ORIGIN,
     methods: process.env.CORS_METHODS,

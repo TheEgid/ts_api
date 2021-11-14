@@ -4,7 +4,6 @@ import { Request } from "express";
 import UsersRepository from "../repos/users-repository";
 import TokenService from "./token-service";
 import { IPingResult, ping } from "@network-utils/tcp-ping";
-import { Unauthorized, NotAcceptable } from "http-json-errors";
 import TokenRepository from "../repos/tokens-repository";
 import Token from "../models/token-entity";
 
@@ -22,7 +21,7 @@ export default class UserService {
       await TokenService.setToken(newUser);
       return await TokenService.getTokenByUser(newUser);
     } else {
-      throw new NotAcceptable(`Already logged as ${newUser.email}`);
+      return undefined;
     }
   }
 
@@ -37,7 +36,7 @@ export default class UserService {
       await TokenService.setToken(oldUser);
       return await TokenService.getTokenByUser(oldUser);
     } else {
-      throw new Unauthorized("Wrong Password or Username");
+      return undefined;
     }
   }
 
